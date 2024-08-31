@@ -66,3 +66,9 @@ func CreateUser(context *gin.Context) {
 		"user": user,
 	})
 }
+
+func GetUser(context *gin.Context) {
+	context.JSON(http.StatusOK, gin.H{
+		"user": "User has logged in",
+	})
+}
