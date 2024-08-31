@@ -11,15 +11,15 @@ import (
 	"testing"
 	"user-service/pkg/models"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func MockModules() sqlmock.Sqlmock {
+	// mock db
 	mockDb, mock, _ := sqlmock.New()
 	dialector := postgres.New(postgres.Config{
 		Conn:       mockDb,
@@ -27,6 +27,10 @@ func MockModules() sqlmock.Sqlmock {
 	})
 	db, _ := gorm.Open(dialector, &gorm.Config{})
 	SetDbClient(db)
+
+	// mock kafka
+	kafkaProducer, _ := kafka.NewProducer(&kafka.ConfigMap{"test.mock.num.brokers": 3})
+	SetUserTopicProducer(kafkaProducer)
 
 	return mock
 }
@@ -73,5 +77,4 @@ func TestCreateUser(t *testing.T) {
 		b, _ := io.ReadAll(w.Body)
 		t.Error(w.Code, string(b))
 	}
-	assert.Equal(t, 1, 1, "Should be equal")
 }
