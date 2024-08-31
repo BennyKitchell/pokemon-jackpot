@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 	"user-service/controllers"
 	initializers "user-service/init"
 
@@ -19,6 +21,12 @@ func init() {
 	// setup redis
 
 	//setup kafka
+	userTopicProducer, err := initializers.ConnectProducerToKafka()
+	if err != nil {
+		fmt.Printf("Failed to create producer: %s", err)
+		os.Exit(1)
+	}
+	controllers.SetUserTopicProducer(userTopicProducer)
 }
 
 func main() {
@@ -28,7 +36,6 @@ func main() {
 	defer cancel()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-
 	router.POST("/v1/user", controllers.CreateUser)
 
 	if err := router.Run(port); err != nil {

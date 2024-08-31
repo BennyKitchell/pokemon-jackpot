@@ -13,5 +13,11 @@ services:
       - "5432:5432"
     volumes:
       - ./postgres-data:/var/lib/postgres/data
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka-pokemon-jackpot
+    ports:
+      - "9092:9092"
 volumes:
   postgres-data:
