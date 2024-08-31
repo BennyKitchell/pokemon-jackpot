@@ -19,6 +19,8 @@ func init() {
 	controllers.SetDbClient(dbClient)
 
 	// setup redis
+	redisClient := initializers.ConnectRedis()
+	controllers.SetRedis(redisClient)
 
 	//setup kafka
 	userTopicProducer, err := initializers.ConnectProducerToKafka()

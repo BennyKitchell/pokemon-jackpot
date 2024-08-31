@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 	"user-service/pkg/models"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
@@ -32,12 +33,16 @@ func CreateUser(context *gin.Context) {
 	}
 	key := fmt.Sprintf("user-%s", user.Email)
 
-	// handle cache hydration here
-
 	userJson, err := json.Marshal(user)
 	if err != nil {
 		log.Panic(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+		return
+	}
+
+	_, err = RedisClient.Set(context, key, userJson, 1*time.Hour).Result()
+	if err != nil {
+		log.Fatal(err)
 		return
 	}
 
