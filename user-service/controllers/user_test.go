@@ -12,8 +12,11 @@ import (
 	"user-service/pkg/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	miniredis "github.com/alicebob/miniredis/v2"
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gin-gonic/gin"
+	"github.com/redis/go-redis/v9"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -32,6 +35,12 @@ func MockModules() sqlmock.Sqlmock {
 	kafkaProducer, _ := kafka.NewProducer(&kafka.ConfigMap{"test.mock.num.brokers": 3})
 	SetUserTopicProducer(kafkaProducer)
 
+	// mock redis
+	server, _ := miniredis.Run()
+
+	SetRedis(redis.NewClient(&redis.Options{
+		Addr: server.Addr(),
+	}))
 	return mock
 }
 
@@ -73,6 +82,18 @@ func TestCreateUser(t *testing.T) {
 	c.Request.Body = io.NopCloser(bytes.NewBuffer(jsonbytes))
 	CreateUser(c)
 
+	mockUserResp := &models.User{
+		ID:       1,
+		Email:    "testaccount@aol.com",
+		Password: "password",
+		Username: "testaccount",
+	}
+
+	respBody, _ := json.Marshal(gin.H{
+		"user": mockUserResp,
+	})
+
+	assert.Equal(t, respBody, w.Body.Bytes(), "They should be equal")
 	if w.Code != 200 {
 		b, _ := io.ReadAll(w.Body)
 		t.Error(w.Code, string(b))
