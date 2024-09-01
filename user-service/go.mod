@@ -4,6 +4,7 @@ go 1.23
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/stretchr/testify v1.9.0
 	gorm.io/gorm v1.25.10
