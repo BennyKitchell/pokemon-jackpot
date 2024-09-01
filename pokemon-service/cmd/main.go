@@ -23,6 +23,9 @@ func init() {
 	userTopicConsumer := initializers.ConnectConsumerToKafka()
 	controllers.SetUserTopicConsumer(userTopicConsumer)
 
+	jackpotTopicProducer := initializers.ConnectProducerToKafka()
+	controllers.SetJackpotProducer(jackpotTopicProducer)
+
 	//setup db
 	dbClient := initializers.ConnectDB()
 	controllers.SetDbClient(dbClient)

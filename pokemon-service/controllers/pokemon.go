@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/gin-gonic/gin"
 )
 
@@ -71,7 +72,28 @@ func RollPokemon(context *gin.Context) {
 	}
 
 	if (randomPokemon[0].ID == randomPokemon[1].ID) && (randomPokemon[0].ID == randomPokemon[2].ID) {
-		// Handle jackpot message
+		jackpot := models.User_Pokemon{UserId: user.ID, PokemonId: randomPokemon[0].ID}
+		jackpotJson, err := json.Marshal(jackpot)
+		if err != nil {
+			log.Panic(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			return
+		}
+
+		message := &kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &JackpotTopic, Partition: kafka.PartitionAny},
+			Key:            []byte([]byte("jackpot")),
+			Value:          []byte(jackpotJson),
+		}
+		err = JackpotTopicProducer.Produce(message, nil)
+		go JackpotTopicProducer.Flush(15 * 1000)
+
+		if err != nil {
+			log.Printf("Error writing message to Kafka: %s", err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+			return
+		}
+
 		context.JSON(http.StatusOK, gin.H{"pokemon": randomPokemon, "jackpot": true})
 		return
 	}
@@ -83,7 +105,32 @@ func RollPokemon(context *gin.Context) {
 
 	// If the roll count has been a few terms, give a jackpt for better user experience
 	if roll%5 == 0 {
-		// Handle jackpot message
+		for i := range 2 {
+			randomPokemon[i] = randomPokemon[2]
+		}
+
+		tmp := models.User_Pokemon{UserId: user.ID, PokemonId: randomPokemon[0].ID}
+		jackpotJson, err := json.Marshal(tmp)
+		if err != nil {
+			log.Panic(err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
+			return
+		}
+
+		message := &kafka.Message{
+			TopicPartition: kafka.TopicPartition{Topic: &JackpotTopic, Partition: kafka.PartitionAny},
+			Key:            []byte([]byte("jackpot")),
+			Value:          []byte(jackpotJson),
+		}
+		err = JackpotTopicProducer.Produce(message, nil)
+		go JackpotTopicProducer.Flush(15 * 1000)
+
+		if err != nil {
+			log.Printf("Error writing message to Kafka: %s", err)
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+			return
+		}
+
 		context.JSON(http.StatusOK, gin.H{"pokemon": randomPokemon, "jackpot": true})
 		return
 	}
