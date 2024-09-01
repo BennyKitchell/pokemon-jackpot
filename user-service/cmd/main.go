@@ -39,6 +39,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.POST("/v1/user", controllers.CreateUser)
+	router.POST("/v1/login", controllers.GetUser)
 
 	if err := router.Run(port); err != nil {
 		log.Printf("failed to run the server: %v", err)
