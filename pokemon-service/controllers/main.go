@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"context"
+
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
@@ -10,6 +12,7 @@ var (
 	RedisClient       *redis.Client
 	DBClient          *gorm.DB
 	UserTopicConsumer *kafka.Consumer
+	ctxBackground     = context.Background()
 	UserTopic         = "users"
 )
 

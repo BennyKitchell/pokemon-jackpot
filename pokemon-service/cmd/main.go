@@ -35,7 +35,7 @@ func main() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	router.Use(cors.Default())
+	go controllers.StartUserCreationConsumer()
 	if err := router.Run(port); err != nil {
 		log.Printf("failed to run the server: %v", err)
 	}
