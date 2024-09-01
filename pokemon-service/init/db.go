@@ -19,7 +19,8 @@ func ConnectDB() *gorm.DB {
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
-	db.AutoMigrate(models.Pokemon{}) // Migrate the Pokemon model
+	db.AutoMigrate(models.Pokemon{})      // Migrate the Pokemon model
+	db.AutoMigrate(models.User_Pokemon{}) // Migrate the User_Pokemon model
 
 	return db
 }
