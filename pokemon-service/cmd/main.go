@@ -37,6 +37,7 @@ func main() {
 
 	router.GET("/v1/pokemon/:id", controllers.GetPokemon)
 	router.GET("/v1/collection/:userid", controllers.GetCollection)
+	router.POST("/pokemon/spin/:spinNumber", controllers.RollPokemon)
 	go controllers.StartUserCreationConsumer()
 	if err := router.Run(port); err != nil {
 		log.Printf("failed to run the server: %v", err)
