@@ -36,6 +36,7 @@ func main() {
 	router.Use(cors.Default())
 
 	router.GET("/v1/pokemon/:id", controllers.GetPokemon)
+	router.GET("/v1/collection/:userid", controllers.GetCollection)
 	go controllers.StartUserCreationConsumer()
 	if err := router.Run(port); err != nil {
 		log.Printf("failed to run the server: %v", err)
