@@ -33,7 +33,7 @@ func init() {
 }
 
 func main() {
-	println("Server running on port: ", port)
+	println("Server running on port", port)
 	_, cancel := context.WithCancel(context.Background())
 
 	defer cancel()

@@ -35,7 +35,7 @@ func StartUserCreationConsumer() {
 
 		msg, err := UserTopicConsumer.ReadMessage(100 * time.Millisecond)
 		if err != nil {
-			log.Printf("Error reading message from Kafka: %v", err)
+			// log.Printf("Error reading message from Kafka: %v", err)
 			continue
 		}
 
