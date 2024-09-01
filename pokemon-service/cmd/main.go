@@ -29,12 +29,13 @@ func init() {
 
 }
 func main() {
-	println("Server running on port: 8084")
+	println("Server running on port", port)
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(cors.Default())
 
+	router.GET("/v1/pokemon/:id", controllers.GetPokemon)
 	go controllers.StartUserCreationConsumer()
 	if err := router.Run(port); err != nil {
 		log.Printf("failed to run the server: %v", err)
