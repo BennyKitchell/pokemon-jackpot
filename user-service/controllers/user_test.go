@@ -44,10 +44,6 @@ func MockModules() sqlmock.Sqlmock {
 	return mock
 }
 
-func TestGetUser(t *testing.T) {
-	t.Skip()
-}
-
 func TestCreateUser(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	mock := MockModules()
@@ -92,6 +88,62 @@ func TestCreateUser(t *testing.T) {
 	respBody, _ := json.Marshal(gin.H{
 		"user": mockUserResp,
 	})
+
+	assert.Equal(t, respBody, w.Body.Bytes(), "They should be equal")
+	if w.Code != 200 {
+		b, _ := io.ReadAll(w.Body)
+		t.Error(w.Code, string(b))
+	}
+}
+
+func TestGetUser(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	mock := MockModules()
+
+	users := []models.User{
+		{ID: 1, Username: "test1", Email: "test1@aol.com", Password: "password"},
+		{ID: 2, Username: "test2", Email: "test2@aol.com", Password: "password"},
+	}
+
+	rows := mock.NewRows([]string{"id", "username", "email", "password"})
+	for _, b := range users {
+		rows.AddRow(b.ID, b.Username, b.Email, b.Password)
+	}
+
+	mock.
+		ExpectQuery(regexp.QuoteMeta("SELECT * FROM \"users\" WHERE email = $1 AND password = $2 ORDER BY \"users\".\"id\" LIMIT $3")).
+		WillReturnRows(rows)
+
+	w := httptest.NewRecorder()
+	c, _ := gin.CreateTestContext(w)
+	c.Request = &http.Request{
+		Header: make(http.Header),
+	}
+	c.Request.Method = "GET"
+	c.Request.Header.Set("Content-Type", "application/json")
+	content := models.User{
+		Email:    "test1@aol.com",
+		Password: "password",
+	}
+	jsonbytes, err := json.Marshal(content)
+	if err != nil {
+		panic(err)
+	}
+	c.Request.Body = io.NopCloser(bytes.NewBuffer(jsonbytes))
+	GetUser(c)
+
+	mockUserResp := &models.User{
+		ID:       1,
+		Email:    "test1@aol.com",
+		Username: "test1",
+		Password: "password",
+	}
+	respBody, err := json.Marshal(gin.H{
+		"user": mockUserResp,
+	})
+	if err != nil {
+		t.Error("Could not marshal json")
+	}
 
 	assert.Equal(t, respBody, w.Body.Bytes(), "They should be equal")
 	if w.Code != 200 {
