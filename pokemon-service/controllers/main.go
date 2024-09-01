@@ -1,13 +1,16 @@
 package controllers
 
 import (
+	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 var (
-	RedisClient *redis.Client
-	DBClient    *gorm.DB
+	RedisClient       *redis.Client
+	DBClient          *gorm.DB
+	UserTopicConsumer *kafka.Consumer
+	UserTopic         = "users"
 )
 
 func SetRedis(rc *redis.Client) {
@@ -16,4 +19,8 @@ func SetRedis(rc *redis.Client) {
 
 func SetDbClient(db *gorm.DB) {
 	DBClient = db
+}
+
+func SetUserTopicConsumer(kr *kafka.Consumer) {
+	UserTopicConsumer = kr
 }

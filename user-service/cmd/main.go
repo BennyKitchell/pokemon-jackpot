@@ -8,6 +8,7 @@ import (
 	"user-service/controllers"
 	initializers "user-service/init"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,6 +39,7 @@ func main() {
 	defer cancel()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.POST("/v1/user", controllers.CreateUser)
 	router.POST("/v1/login", controllers.GetUser)
 
