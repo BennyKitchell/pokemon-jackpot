@@ -43,7 +43,7 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  bottom: 5%;
+  bottom: 3%;
   left: 50%;
   transform: translate(-50%,-50%);
 }
@@ -78,3 +78,6 @@ input[type=text], input[type=password], input[type=email] {
   box-sizing: border-box;
 }
 
+.spinner-container {
+  display: flex;
+}

@@ -4,9 +4,12 @@ import './App.css'
 import pokemonLogo from './assets/pokemon.png'
 import jackpotPokemonLogo from './assets/Jackpot.png'
 import questionMarkImage from './assets/question.jpg'
+import Collection from './components/Collection'
 function App() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const [collectionEnabled, setCollectionEnabled] = useState<boolean>(false)
+  const [jackpot, setJackpot] = useState<boolean>(false)
   const [pokemon, setPokemon] = useState([
     {id: '', name: '', image_url: questionMarkImage, type: ''},
     {id: '', name: '', image_url: questionMarkImage, type: ''},
@@ -23,7 +26,8 @@ function App() {
   const fetchPokemon = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     if(user?.id) {
-      fetch(`http://localhost:8084/pokemon/roll/${spinCounter}`, {
+      setJackpot(false)
+      fetch(`http://localhost:8084/v1/pokemon/spin/${spinCounter}`, {
         method: "POST",
         body: JSON.stringify(user),
       })
@@ -34,6 +38,9 @@ function App() {
         .then((data) => {
           setPokemon(data.pokemon);
           setSpinCounter(spinCounter+1);
+          if(data.jackpot) {
+            setJackpot(data.jackpot);
+          }
         });
     }
   };
@@ -41,7 +48,7 @@ function App() {
   const createAccount = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     const data = JSON.stringify({email, password});
-      fetch(`http://localhost:8020/user`, {
+      fetch(`http://localhost:8020/v1/user`, {
         method: "POST",
         body: data,
       })
@@ -57,7 +64,7 @@ function App() {
     const login = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       e.preventDefault();
       const data = JSON.stringify({email, password});
-        fetch(`http://localhost:8020/login`, {
+        fetch(`http://localhost:8020/v1/login`, {
           method: "POST",
           headers: {
             Accept: 'application/json',
@@ -84,8 +91,20 @@ function App() {
           </div>
           { user?.id && user?.id > -1 ? (
             <div>
-              <Spinner pokemon={pokemon}/>
-              <button className='roll-button button' onClick={fetchPokemon}>Spin</button>
+            {
+              collectionEnabled ? (
+                <div>
+                  <button className='back-button button' onClick={() => {setCollectionEnabled(!collectionEnabled)}}>Back</button>
+                  <Collection userId={user.id}/>
+                </div>
+    
+              ) : 
+              <div>
+                <button className='login-button button' onClick={() => {setCollectionEnabled(!collectionEnabled)}}>View Collection</button>
+                <Spinner pokemon={pokemon} jackpot={jackpot}/>
+                <button className='roll-button button' onClick={fetchPokemon}>Roll</button>
+              </div>
+            }
             </div>
             ): 
             <div>
