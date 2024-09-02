@@ -49,7 +49,7 @@ func StartJackpotConsumer() {
 
 		// TODO: Clean this up, not the best way to handle this error
 		// Notes: Comparing error to expected sql.ErrNoRows doesn't provide desired behavior
-		if DBClient.Where("userid = ? AND pokemonid = ?", userJackpot.UserId, userJackpot.PokemonId).First(&userJackpot).Error == nil {
+		if DBClient.Where("user_id = ? AND pokemon_id = ?", userJackpot.UserId, userJackpot.PokemonId).First(&userJackpot).Error == nil {
 			println("User already owns this pokemon, skipping db update")
 			return
 		}
@@ -60,7 +60,7 @@ func StartJackpotConsumer() {
 		}
 
 		pokemon := models.Pokemon{}
-		if DBClient.Where("id = ?", userJackpot.UserId).First(&pokemon).Error != nil {
+		if DBClient.Where("id = ?", userJackpot.UserId).Find(&pokemon).Error != nil {
 			log.Printf("Error fetching collection in consumer: %v", err)
 			return
 		}
