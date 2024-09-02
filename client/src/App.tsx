@@ -1,16 +1,22 @@
 import { useState } from 'react'
 import Spinner from './components/Spinner'
 import './App.css'
-
+import pokemonLogo from './assets/pokemon.png'
+import jackpotPokemonLogo from './assets/Jackpot.png'
+import questionMarkImage from './assets/question.jpg'
 function App() {
   const [pokemon, setPokemon] = useState([
-    {id: '1', name: '', image_url: "https://i.postimg.cc/254jR6Fb/red-neon-question-mark-on-a-black-background-vector-1925641335.jpg", type: 'Grass'},
-    {id: '1', name: '', image_url: "https://i.postimg.cc/254jR6Fb/red-neon-question-mark-on-a-black-background-vector-1925641335.jpg", type: 'Grass'},
-    {id: '1', name: '', image_url: "https://i.postimg.cc/254jR6Fb/red-neon-question-mark-on-a-black-background-vector-1925641335.jpg", type: 'Grass'}
+    {id: '', name: '', image_url: questionMarkImage, type: ''},
+    {id: '', name: '', image_url: questionMarkImage, type: ''},
+    {id: '', name: '', image_url: questionMarkImage, type: ''}
   ]);
 
   return (
     <>
+          <div className="logo-container">
+            <img src={pokemonLogo} className="logo" alt="Pokemon in pokemon font" />
+            <img src={jackpotPokemonLogo} className="logo" alt="Jackpot in pokemon font" />
+          </div>
           <div>
             <Spinner pokemon={pokemon}/>
           </div>
