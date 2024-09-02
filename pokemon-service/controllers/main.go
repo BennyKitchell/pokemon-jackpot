@@ -12,10 +12,11 @@ var (
 	RedisClient          *redis.Client
 	DBClient             *gorm.DB
 	UserTopicConsumer    *kafka.Consumer
+	JackpotTopicConsumer *kafka.Consumer
+	JackpotTopicProducer *kafka.Producer
 	ctxBackground        = context.Background()
 	UserTopic            = "users"
 	JackpotTopic         = "jackpot"
-	JackpotTopicProducer *kafka.Producer
 )
 
 func SetRedis(rc *redis.Client) {
@@ -26,8 +27,12 @@ func SetDbClient(db *gorm.DB) {
 	DBClient = db
 }
 
-func SetUserTopicConsumer(kr *kafka.Consumer) {
-	UserTopicConsumer = kr
+func SetUserTopicConsumer(kc *kafka.Consumer) {
+	UserTopicConsumer = kc
+}
+
+func SetJackpotTopicConsumer(kc *kafka.Consumer) {
+	JackpotTopicConsumer = kc
 }
 
 func SetJackpotProducer(kp *kafka.Producer) {
