@@ -32,12 +32,51 @@ function App() {
         })
 
         .then((data) => {
-          console.log(data)
+          console.log(data);
           setPokemon(data.pokemon);
           setSpinCounter(spinCounter+1);
         });
     }
   };
+
+  const createAccount = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.preventDefault();
+    const data = JSON.stringify({email, password});
+    console.log(data)
+      fetch(`http://localhost:8020/user`, {
+        method: "POST",
+        body: data,
+      })
+        .then((response) => {
+          return response.json();
+        })
+
+        .then((data) => {
+          console.log(data);
+          setUser(data.user);
+        });
+    };
+
+    const login = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+      e.preventDefault();
+      const data = JSON.stringify({email, password});
+        fetch(`http://localhost:8020/login`, {
+          method: "POST",
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: data,
+        })
+          .then((response) => {
+            return response.json();
+          })
+  
+          .then((data) => {
+            console.log(data);
+            setUser(data);
+          });
+      };
 
   return (
     <>
@@ -59,8 +98,8 @@ function App() {
                   <input type="text" id="email" name="email" onChange={e => setEmail(e.target.value)} placeholder="example@google.com" />
                   <label htmlFor="password">Password</label>
                   <input type="password" id="password" name="password" onChange={e => setPassword(e.target.value)} />
-                  <button className='login-button button' onClick={() => {console.log("Login")}}>Login</button>
-                  <button className='login-button button' onClick={() => {console.log("Create account")}}>Create Account</button>
+                  <button className='login-button button' onClick={login}>Login</button>
+                  <button className='login-button button' onClick={createAccount}>Create Account</button>
                 </div>
               </div>
           }
