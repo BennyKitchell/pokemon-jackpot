@@ -24,7 +24,6 @@ function Collection(props: collectionProps) {
         })
 
         .then((data) => {
-            console.log(data)
             setPokemon(data.pokemon);
         });
     }, []);

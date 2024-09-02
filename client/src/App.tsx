@@ -32,7 +32,6 @@ function App() {
         })
 
         .then((data) => {
-          console.log(data);
           setPokemon(data.pokemon);
           setSpinCounter(spinCounter+1);
         });
@@ -42,7 +41,6 @@ function App() {
   const createAccount = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     const data = JSON.stringify({email, password});
-    console.log(data)
       fetch(`http://localhost:8020/user`, {
         method: "POST",
         body: data,
@@ -52,7 +50,6 @@ function App() {
         })
 
         .then((data) => {
-          console.log(data);
           setUser(data.user);
         });
     };
@@ -73,7 +70,6 @@ function App() {
           })
   
           .then((data) => {
-            console.log(data);
             setUser(data);
           });
       };
