@@ -23,7 +23,7 @@ function App() {
   const fetchPokemon = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     if(user?.id) {
-      fetch(`http://localhost:8084/pokemon/roll/${spinCounter}`, {
+      fetch(`http://localhost:8084/v1/pokemon/spin/${spinCounter}`, {
         method: "POST",
         body: JSON.stringify(user),
       })
@@ -41,7 +41,7 @@ function App() {
   const createAccount = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     const data = JSON.stringify({email, password});
-      fetch(`http://localhost:8020/user`, {
+      fetch(`http://localhost:8020/v1/user`, {
         method: "POST",
         body: data,
       })
@@ -57,7 +57,7 @@ function App() {
     const login = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       e.preventDefault();
       const data = JSON.stringify({email, password});
-        fetch(`http://localhost:8020/login`, {
+        fetch(`http://localhost:8020/v1/login`, {
           method: "POST",
           headers: {
             Accept: 'application/json',

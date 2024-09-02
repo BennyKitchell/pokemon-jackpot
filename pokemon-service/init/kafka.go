@@ -9,7 +9,7 @@ import (
 
 func ConnectProducerToKafka() *kafka.Producer {
 	producer, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092"})
+		"bootstrap.servers": "kafka:9093"})
 
 	if err != nil {
 		fmt.Printf("Failed to create producer: %s", err)
@@ -20,7 +20,7 @@ func ConnectProducerToKafka() *kafka.Producer {
 }
 func ConnectConsumerToKafka() *kafka.Consumer {
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092",
+		"bootstrap.servers": "kafka:9093",
 		"group.id":          "poke-consumers",
 		"auto.offset.reset": "earliest"})
 

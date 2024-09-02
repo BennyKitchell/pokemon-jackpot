@@ -86,7 +86,6 @@ func RollPokemon(context *gin.Context) {
 			Value:          []byte(jackpotJson),
 		}
 		err = JackpotTopicProducer.Produce(message, nil)
-		go JackpotTopicProducer.Flush(15 * 1000)
 
 		if err != nil {
 			log.Printf("Error writing message to Kafka: %s", err)
@@ -123,7 +122,6 @@ func RollPokemon(context *gin.Context) {
 			Value:          []byte(jackpotJson),
 		}
 		err = JackpotTopicProducer.Produce(message, nil)
-		go JackpotTopicProducer.Flush(15 * 1000)
 
 		if err != nil {
 			log.Printf("Error writing message to Kafka: %s", err)

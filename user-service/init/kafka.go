@@ -6,5 +6,6 @@ import (
 
 func ConnectProducerToKafka() (*kafka.Producer, error) {
 	return kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": "localhost:9092"})
+		"bootstrap.servers":       "kafka:9093",
+		"api.version.fallback.ms": 0})
 }

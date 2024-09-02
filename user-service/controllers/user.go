@@ -59,8 +59,6 @@ func CreateUser(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 		return
 	}
-	// flush the broker, not sure if needed
-	go UserTopicProducer.Flush(15 * 1000)
 
 	context.JSON(http.StatusOK, gin.H{
 		"user": user,
