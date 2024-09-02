@@ -45,8 +45,6 @@ func StartJackpotConsumer() {
 			continue
 		}
 
-		fmt.Printf("jackpot ID: %v\n", userJackpot)
-
 		// TODO: Clean this up, not the best way to handle this error
 		// Notes: Comparing error to expected sql.ErrNoRows doesn't provide desired behavior
 		if DBClient.Where("user_id = ? AND pokemon_id = ?", userJackpot.UserId, userJackpot.PokemonId).First(&userJackpot).Error == nil {

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/rand/v2"
 	"os"
@@ -44,9 +43,6 @@ func StartUserCreationConsumer() {
 			log.Printf("Error unmarshalling message: %v", err)
 			continue
 		}
-
-		// debug
-		fmt.Printf("User Creation Message: %d, email: %s, password: %s, email: %s\n", user.ID, user.Email, user.Password, user.Email)
 
 		// Assign the user one of the starters from the games :easter-egg:
 		starterPokemon := [4]int{1, 4, 7, 25}
