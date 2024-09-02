@@ -1,0 +1,9 @@
+.spinner-container {
+    display: flex;
+}
+
+.pokemon-name {
+    font-size: 200%;
+    font-weight: lighter;
+    margin: -15%;
+}
