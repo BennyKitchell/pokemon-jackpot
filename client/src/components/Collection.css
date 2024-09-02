@@ -1,0 +1,14 @@
+.grid-container {
+    display:flex; flex-direction:column;
+    margin-top: 50%;
+  }
+  
+  .grid-item {
+    margin-top: 50%;
+  }
+
+  .back-button {
+    position: fixed;
+    left: 5%;
+    top: 5%;
+  }
