@@ -5,11 +5,36 @@ import pokemonLogo from './assets/pokemon.png'
 import jackpotPokemonLogo from './assets/Jackpot.png'
 import questionMarkImage from './assets/question.jpg'
 function App() {
+  const [spinCounter, setSpinCounter] = useState(0);
+  const [User, setUser] = useState<User>();
   const [pokemon, setPokemon] = useState([
     {id: '', name: '', image_url: questionMarkImage, type: ''},
     {id: '', name: '', image_url: questionMarkImage, type: ''},
     {id: '', name: '', image_url: questionMarkImage, type: ''}
   ]);
+
+  interface User {
+    id: number
+  } 
+
+  const fetchPokemon = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.preventDefault();
+    if(User?.id) {
+      fetch(`http://localhost:8084/pokemon/roll/${spinCounter}`, {
+        method: "POST",
+        body: JSON.stringify(User),
+      })
+        .then((response) => {
+          return response.json();
+        })
+
+        .then((data) => {
+          console.log(data)
+          setPokemon(data.pokemon);
+          setSpinCounter(spinCounter+1);
+        });
+    }
+  };
 
   return (
     <>
@@ -19,6 +44,7 @@ function App() {
           </div>
           <div>
             <Spinner pokemon={pokemon}/>
+            <button className='roll-button button' onClick={fetchPokemon}>Spin</button>
           </div>
     </>
   )
