@@ -12,6 +12,15 @@ This project was created for a tak-home assignment by Rockbot. It was an exercis
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Shortcuts 
+_A few things I did in this project to save time that I would not do in a production environment_
+
+* Hardcoded Passwords 
+* Only adding tests for one area of the app
+* Releasing without having finished Containerizing everything and having Kubernetes setup 
+* Not using pages and just putting everything into the App (in the client)
+* Minimal errors and eror descriptions
+* No logging or tracing
 
 <!-- GETTING STARTED -->
 ## Getting Started
