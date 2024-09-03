@@ -2,6 +2,7 @@
 # Pokemon Jackpot
 It's Pokemon, it's a slot machine, it's silly fun
 
+<img width="1408" alt="Screenshot 2024-09-03 at 3 29 25 PM" src="https://github.com/user-attachments/assets/ae50b345-21ef-4e9c-9103-49e8824a74fd">
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
