@@ -8,7 +8,7 @@ It's Pokemon, it's a slot machine, it's silly fun
 
 Languages used: Go, React, Typescript
 
-This project was created for a tak-home assignment by Rockbot. It was an exercise to work on a larger project using Go. 
+This project was created for a take-home assignment by Rockbot. It was an exercise to work on a larger project using Go. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
