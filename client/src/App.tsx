@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import Spinner from './components/Spinner'
-import './App.css'
-import pokemonLogo from './assets/pokemon.png'
-import jackpotPokemonLogo from './assets/Jackpot.png'
-import questionMarkImage from './assets/question.jpg'
-import Collection from './components/Collection'
+import { useState } from 'react';
+import Spinner from './components/Spinner';
+import './App.css';
+import pokemonLogo from './assets/pokemon.png';
+import jackpotPokemonLogo from './assets/Jackpot.png';
+import questionMarkImage from './assets/question.jpg';
+import Collection from './components/Collection';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
@@ -23,68 +26,126 @@ function App() {
     id: number
   } 
 
-  const fetchPokemon = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  interface Error {
+    message: string
+    error: Error
+  }
+
+  const fetchPokemon = async (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
-    if(user?.id) {
-      setJackpot(false)
-      fetch(`http://localhost:8084/v1/pokemon/spin/${spinCounter}`, {
+    try {
+      if(user?.id) {
+      const response =  await fetch(`http://localhost:8084/v1/pokemon/spin/${spinCounter}`, {
         method: "POST",
         body: JSON.stringify(user),
       })
-        .then((response) => {
-          return response.json();
-        })
-
-        .then((data) => {
-          setPokemon(data.pokemon);
-          setSpinCounter(spinCounter+1);
-          if(data.jackpot) {
-            setJackpot(data.jackpot);
-          }
+      if (!response.ok) {
+        throw new Error('Error fetching pokemon, perhaps the database was not seeded');
+      }
+      const data = await response.json();
+      setPokemon(data.pokemon);
+      setSpinCounter(spinCounter+1);
+      if(data.jackpot) {
+        setJackpot(data.jackpot);
+        toast.success("This pokemon was added to your collection!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
         });
+      }
+      console.log(data);
+    }
+    } catch(error) {
+      const err = error as Error
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
-  const createAccount = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+  const createAccount = async (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
-    const data = JSON.stringify({email, password});
-      fetch(`http://localhost:8020/v1/user`, {
+    const bodyData = JSON.stringify({email, password});
+    try {
+      const response = await fetch(`http://localhost:8020/v1/user`, {
         method: "POST",
-        body: data,
-      })
-        .then((response) => {
-          return response.json();
-        })
-
-        .then((data) => {
-          setUser(data.user);
+        body: bodyData,
+      });
+      if (!response.ok) {
+        throw new Error('A user with this email already exists, please login',);
+      }
+      const data = await response.json();
+      setUser(data.user);
+    } catch(error) {
+      const err = error as Error
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
         });
     };
+  };
 
-    const login = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    const login = async (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
       e.preventDefault();
-      const data = JSON.stringify({email, password});
-        fetch(`http://localhost:8020/v1/login`, {
+      const bodyData = JSON.stringify({email, password});
+      try {
+        const response = await fetch(`http://localhost:8020/v1/login`, {
           method: "POST",
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: data,
-        })
-          .then((response) => {
-            return response.json();
-          })
-  
-          .then((data) => {
-            setUser(data);
+          body: bodyData,
+        });
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setUser(data);
+      } catch(error) {
+        const err = error as Error
+        console.error(error)
+        console.log('There has been a problem with your fetch operation: ', err.message);
+        toast(err.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
           });
       };
+    };
 
   return (
     <>
     {
       <div>
+        <ToastContainer />
           <div className="logo-container">
             <img src={pokemonLogo} className="logo" alt="Pokemon in pokemon font" />
             <img src={jackpotPokemonLogo} className="logo" alt="Jackpot in pokemon font" />

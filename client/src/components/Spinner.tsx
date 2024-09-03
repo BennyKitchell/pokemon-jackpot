@@ -29,7 +29,7 @@ function Spinner(props: SpinnerProps) {
                   </div>
                 ))
               ) : (
-                <h2>Loading Pokemon...</h2>
+                <h2>Collection is empty, spin to win!</h2>
               )}
               {jackpot && <ConfettiExplosion />}
               </div>

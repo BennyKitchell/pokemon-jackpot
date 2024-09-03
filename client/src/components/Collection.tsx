@@ -22,7 +22,6 @@ function Collection(props: collectionProps) {
         .then((response) => {
             return response.json();
         })
-
         .then((data) => {
             setPokemon(data.pokemon);
         });
