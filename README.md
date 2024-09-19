@@ -46,6 +46,12 @@ Be sure to have the following installed:
         brew install vite
     ```
 
+* Postgres
+     * brew
+    ```sh
+        brew install postgresql
+    ```
+
 
 
 ### Installation & Usage
